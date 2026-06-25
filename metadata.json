@@ -1,0 +1,6 @@
+{
+  "name": "MomentHive",
+  "description": "India's first event guest photo sharing platform. WhatsApp-first, shared albums for live events.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
