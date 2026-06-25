@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Organizer Dashboard — MomentHive</title>
+    <!-- Brand Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Brand CSS Stylesheet -->
+    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+      /* Page specific enhancements */
+      .dashboard-layout {
+        display: none;
+      }
+      .pin-prompt-container {
+        max-width: 400px;
+        margin: var(--space-16) auto;
+        text-align: center;
+      }
+      .stat-card {
+        background: linear-gradient(135deg, var(--bg-card-dark) 0%, rgba(124, 58, 237, 0.05) 100%);
+        border: 1px solid var(--border-soft);
+        border-radius: 16px;
+        padding: 24px;
+        display: flex;
+        align-items: center;
+        gap: var(--space-4);
+      }
+      .stat-icon-wrapper {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: rgba(124, 58, 237, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--hive-purple);
+      }
+      .stat-value {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 28px;
+        font-weight: 800;
+        color: var(--text-primary);
+        line-height: 1.1;
+      }
+      .stat-label {
+        font-size: 13px;
+        color: var(--text-secondary);
+      }
+      .dash-grid-layout {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--space-6);
+      }
+      @media (min-width: 1024px) {
+        .dash-grid-layout {
+          grid-template-columns: 2fr 1fr;
+        }
+      }
+      /* Dashboard photo action lists */
+      .dashboard-gallery-item {
+        position: relative;
+        border-radius: 12px;
+        border: 1px solid var(--border-soft);
+        overflow: hidden;
+        background: var(--bg-card-dark);
+        aspect-ratio: 1;
+      }
+      .dashboard-gallery-media {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .dashboard-gallery-actions {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(10, 10, 10, 0.85);
+        padding: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+      .dashboard-gallery-item:hover .dashboard-gallery-actions {
+        opacity: 1;
+      }
+      .flagged-badge {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        background: var(--error-red);
+        color: white;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 600;
+        z-index: 10;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Offline Notification banner -->
+    <div id="offline-banner" class="offline-banner">
+      <i data-lucide="wifi-off"></i> Offline. Changes will be saved locally.
+    </div>
+
+    <!-- Organizer Navigation Header -->
+    <header>
+      <div class="container flex justify-between items-center">
+        <a href="index.html" class="logo-text">
+          <i data-lucide="aperture" style="stroke: url(#purple-pink-grad); width: 28px; height: 28px;"></i>
+          MomentHive
+        </a>
+        <div class="flex items-center gap-3">
+          <span class="badge badge-pink font-bold">Admin Console</span>
+          <button id="logout-btn" class="btn-secondary" style="display: none; padding: 6px 12px; font-size: 13px;">Logout</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Invisible SVG Gradient for Lucide stroke gradient matching -->
+    <svg width="0" height="0" style="position: absolute;">
+      <defs>
+        <linearGradient id="purple-pink-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#7C3AED" />
+          <stop offset="100%" stop-color="#DB2777" />
+        </linearGradient>
+      </defs>
+    </svg>
+
+    <main class="container mb-24 mt-8">
+      <!-- 1. Organizer Access PIN Prompt -->
+      <div id="pin-prompt-view" class="pin-prompt-container card">
+        <i data-lucide="shield-alert" class="mb-4 text-gradient" style="width: 48px; height: 48px; margin: 0 auto;"></i>
+        <h3 class="mb-2">Admin Security Verification</h3>
+        <p class="mb-6" style="font-size: 14px; color: var(--text-secondary);">Enter the 4-digit Dashboard PIN (last 4 digits of your organizer phone) to access controls.</p>
+        
+        <div class="form-group mb-4">
+          <input class="form-input" type="password" id="organizer-pin" placeholder="••••" style="text-align: center; font-size: 24px; letter-spacing: 0.5em;" maxlength="4" />
+        </div>
+        
+        <button id="verify-pin-btn" class="btn-primary" style="width: 100%;">Verify & Enter Console</button>
+      </div>
+
+      <!-- 2. Full Dashboard Console Layout -->
+      <div id="dashboard-view" class="dashboard-layout">
+        <!-- Event overview header -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+          <div>
+            <h1 id="dash-event-name" class="font-heading">Loading Event Console...</h1>
+            <p style="font-size: 14px; color: var(--text-secondary);">Event ID: <span id="dash-event-id" class="code-font font-bold">EVT-xxx</span> | Status: <span id="dash-event-status" class="badge">Active</span></p>
+          </div>
+          <div class="flex gap-2 flex-wrap">
+            <button id="copy-guest-album-btn" class="btn-secondary">
+              <i data-lucide="copy"></i> Guest Album URL
+            </button>
+            <button id="download-all-zip-btn" class="btn-primary">
+              <i data-lucide="archive"></i>
+              <span id="zip-btn-text">Download All as ZIP</span>
+              <span id="zip-btn-spinner" class="spinner" style="display: none; width: 14px; height: 14px; border-width: 2px;"></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Analytics stats cards -->
+        <div class="grid grid-cols-1 grid-cols-sm-2 grid-cols-md-4 gap-4 mb-8">
+          <div class="stat-card">
+            <div class="stat-icon-wrapper"><i data-lucide="image"></i></div>
+            <div>
+              <div id="stat-photos-count" class="stat-value">0</div>
+              <div class="stat-label">Total Photos</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon-wrapper" style="color: var(--memory-pink); background: rgba(219,39,119,0.1);"><i data-lucide="video"></i></div>
+            <div>
+              <div id="stat-videos-count" class="stat-value">0</div>
+              <div class="stat-label">Total Videos</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon-wrapper" style="color: var(--success-green); background: rgba(5,150,105,0.1);"><i data-lucide="users"></i></div>
+            <div>
+              <div id="stat-guests-count" class="stat-value">0</div>
+              <div class="stat-label">Total Guests</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon-wrapper" style="color: var(--warning-amber); background: rgba(217,119,6,0.1);"><i data-lucide="award"></i></div>
+            <div>
+              <div id="stat-active-guest" class="stat-value" style="font-size: 16px;">None</div>
+              <div class="stat-label">Most Active Guest</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Workspace split grid -->
+        <div class="dash-grid-layout">
+          <!-- Left Col: Photo Stream & Moderation -->
+          <div class="flex flex-col gap-6">
+            <div class="card">
+              <div class="flex justify-between items-center mb-6">
+                <h3 class="font-heading">Photo Stream Moderation</h3>
+                <div class="flex items-center gap-3">
+                  <span style="font-size: 13px; color: var(--text-secondary);">Show Flagged Only</span>
+                  <label class="toggle-container">
+                    <input type="checkbox" id="moderation-flagged-toggle" style="display: none;" />
+                    <div class="toggle-switch"></div>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Stream empty placeholder -->
+              <div id="dash-empty-gallery-slate" class="text-center" style="padding: 40px var(--space-4); display: none;">
+                <i data-lucide="image-off" class="mb-2" style="color: var(--text-muted); width: 32px; height: 32px; margin: 0 auto;"></i>
+                <p style="font-size: 14px; color: var(--text-secondary);">No photos matches this filter.</p>
+              </div>
+
+              <!-- Grid moderation view -->
+              <div id="dash-gallery-grid" class="grid grid-cols-1 grid-cols-sm-2 grid-cols-md-3 gap-4">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+            <!-- Guest List Table -->
+            <div class="card">
+              <div class="flex justify-between items-center mb-6">
+                <h3 class="font-heading">Registered Guest list</h3>
+                <button id="export-guests-csv-btn" class="btn-secondary" style="padding: 8px 16px; font-size: 13px;">
+                  <i data-lucide="download"></i> Export CSV
+                </button>
+              </div>
+
+              <div class="custom-table-container">
+                <table class="custom-table" id="guest-list-table">
+                  <thead>
+                    <tr>
+                      <th>Guest Name</th>
+                      <th>WhatsApp Number</th>
+                      <th>Photos Shared</th>
+                      <th>Join Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Populated dynamically -->
+                    <tr>
+                      <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 32px 0;">No guests registered yet.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Col: Controls & Settings -->
+          <div class="flex flex-col gap-6">
+            <!-- Event Settings & Controls -->
+            <div class="card">
+              <h3 class="font-heading mb-4">Event Controls</h3>
+              
+              <!-- Album state toggle (Active / Closed) -->
+              <div class="flex items-center justify-between p-3 mb-4" style="border-radius: 8px; background: var(--bg-surface-dark); border: 1px solid var(--border-soft);">
+                <div class="flex flex-col">
+                  <span class="form-label" style="margin-bottom: 0;">Album Active Status</span>
+                  <span style="font-size: 12px; color: var(--text-muted);">Toggle to pause or reopen guest uploads</span>
+                </div>
+                <label class="toggle-container">
+                  <input type="checkbox" id="album-active-toggle" checked style="display: none;" />
+                  <div class="toggle-switch"></div>
+                </label>
+              </div>
+
+              <div class="form-group mb-4">
+                <label class="form-label">Regenerate QR Code Canvas</label>
+                <div id="dash-qrcode-canvas" class="qr-wrapper" style="margin: var(--space-2) auto; background: white; padding: 10px;"></div>
+                <button id="dash-download-qr-btn" class="btn-secondary" style="width: 100%;">
+                  <i data-lucide="download"></i> Download QR (PNG)
+                </button>
+              </div>
+            </div>
+
+            <!-- Sponsor Panel Setup -->
+            <div class="card">
+              <h3 class="font-heading mb-2">Sponsor Customizer</h3>
+              <p class="mb-4" style="font-size: 13px; color: var(--text-secondary);">Upload a sponsor's logo and name to display as an elegant watermark banner in the guest album gallery view.</p>
+              
+              <form id="dash-sponsor-form">
+                <div class="form-group">
+                  <label class="form-label" for="sponsor-name">Sponsor Name</label>
+                  <input class="form-input" type="text" id="sponsor-name" placeholder="e.g., Vivante Celebrations" />
+                </div>
+                <div class="form-group mb-6">
+                  <label class="form-label" for="sponsor-logo-url">Sponsor Logo Image URL</label>
+                  <input class="form-input" type="url" id="sponsor-logo-url" placeholder="e.g., https://example.com/logo.png" />
+                </div>
+                <button type="submit" id="sponsor-save-btn" class="btn-primary" style="width: 100%;">
+                  <i data-lucide="check"></i> Save Sponsor Branding
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container flex flex-col md:flex-row justify-between items-center gap-4">
+        <div>
+          <span class="logo-text" style="font-size: 18px;">MomentHive</span>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">© 2026 MomentHive. India's first event guest photo album platform.</p>
+        </div>
+        <div style="font-size: 13px; color: var(--text-secondary);" class="flex items-center gap-4">
+          <span>Made in India 🇮🇳</span>
+          <span>|</span>
+          <a href="mailto:support@momenthive.in" style="color: var(--text-secondary); text-decoration: none;">support@momenthive.in</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- JSZip and FileSaver via CDNs for local client zip compression -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <!-- QRCode.js via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Supabase JS Client via CDN (must load before module scripts) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Dashboard page JavaScript module -->
+    <script type="module" src="/js/dashboard.js"></script>
+  </body>
+</html>

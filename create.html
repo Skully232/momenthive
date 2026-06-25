@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create shared photo album — MomentHive</title>
+    <!-- Brand Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Brand CSS Stylesheet -->
+    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+      .form-container {
+        max-width: 650px;
+        margin: var(--space-8) auto;
+      }
+      .color-picker-wrapper {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+      }
+      .color-input-bubble {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 2px solid var(--border-soft);
+        cursor: pointer;
+        padding: 0;
+        overflow: hidden;
+      }
+      .color-input-bubble::-webkit-color-swatch-wrapper {
+        padding: 0;
+      }
+      .color-input-bubble::-webkit-color-swatch {
+        border: none;
+        border-radius: 50%;
+      }
+      /* Success details styling */
+      .success-card {
+        display: none;
+        max-width: 600px;
+        margin: var(--space-8) auto;
+        text-align: center;
+      }
+      .qr-wrapper {
+        background: white;
+        padding: var(--space-4);
+        border-radius: 12px;
+        width: fit-content;
+        margin: var(--space-6) auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .action-row {
+        background: var(--bg-surface-dark);
+        border: 1px solid var(--border-soft);
+        border-radius: 12px;
+        padding: var(--space-4);
+        margin-top: var(--space-4);
+        text-align: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: var(--space-4);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Offline Notification banner -->
+    <div id="offline-banner" class="offline-banner">
+      <i data-lucide="wifi-off"></i> You are currently offline. Event creation will be cached locally.
+    </div>
+
+    <!-- Main Navigation Header -->
+    <header>
+      <div class="container flex justify-between items-center">
+        <a href="index.html" class="logo-text">
+          <i data-lucide="aperture" style="stroke: url(#purple-pink-grad); width: 28px; height: 28px;"></i>
+          MomentHive
+        </a>
+        <nav class="flex items-center gap-4">
+          <a href="index.html" class="btn-secondary" style="padding: 8px 16px; font-size: 14px;">Back to Home</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Invisible SVG Gradient for Lucide stroke gradient matching -->
+    <svg width="0" height="0" style="position: absolute;">
+      <defs>
+        <linearGradient id="purple-pink-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#7C3AED" />
+          <stop offset="100%" stop-color="#DB2777" />
+        </linearGradient>
+      </defs>
+    </svg>
+
+    <!-- Creation Form State -->
+    <main class="container">
+      <div id="form-section" class="form-container card">
+        <h2 class="mb-2">Create Shared Album</h2>
+        <p class="mb-6" style="color: var(--text-secondary);">Fill in the details below to launch your event album and share the QR code with guests instantly.</p>
+        
+        <form id="create-event-form">
+          <h3 class="mb-4 text-gradient">1. Event Details</h3>
+          
+          <div class="grid grid-cols-1 grid-cols-sm-2 gap-4">
+            <div class="form-group">
+              <label class="form-label" for="event-name">Event Name *</label>
+              <input class="form-input" type="text" id="event-name" placeholder="e.g., Shivam & Anjali's Sangeet" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="event-type">Event Type *</label>
+              <select class="form-select" id="event-type" required>
+                <option value="" disabled selected>Select event type</option>
+                <option value="Wedding">Wedding</option>
+                <option value="Corporate">Corporate</option>
+                <option value="College Fest">College Fest</option>
+                <option value="Birthday">Birthday</option>
+                <option value="Concert">Concert</option>
+                <option value="Product Launch">Product Launch</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 grid-cols-sm-2 gap-4">
+            <div class="form-group">
+              <label class="form-label" for="event-date">Event Date *</label>
+              <input class="form-input" type="date" id="event-date" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="event-password">Access Password (Optional)</label>
+              <input class="form-input" type="password" id="event-password" placeholder="Lock album from public viewing" />
+            </div>
+          </div>
+
+          <hr style="border: none; border-top: 1px solid var(--border-soft); margin: var(--space-6) 0;" />
+
+          <h3 class="mb-4 text-gradient">2. Organizer Contact</h3>
+          
+          <div class="grid grid-cols-1 grid-cols-sm-2 gap-4">
+            <div class="form-group">
+              <label class="form-label" for="organizer-name">Your Name *</label>
+              <input class="form-input" type="text" id="organizer-name" placeholder="e.g., Shivam Kumar" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="organizer-phone">Your Phone (WhatsApp-First) *</label>
+              <input class="form-input" type="tel" id="organizer-phone" placeholder="e.g., 9876543210 (without +91)" required pattern="[0-9]{10}" title="Please enter a valid 10-digit mobile number" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="organizer-email">Your Email Address *</label>
+            <input class="form-input" type="email" id="organizer-email" placeholder="e.g., shivam@gmail.com" required />
+          </div>
+
+          <hr style="border: none; border-top: 1px solid var(--border-soft); margin: var(--space-6) 0;" />
+
+          <h3 class="mb-4 text-gradient">3. Custom Branding & Limits</h3>
+
+          <div class="grid grid-cols-1 grid-cols-sm-2 gap-4">
+            <div class="form-group">
+              <label class="form-label" for="max-photos">Max Photos Allowed</label>
+              <input class="form-input" type="number" id="max-photos" value="500" min="10" max="5000" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="album-color">Primary Album Color</label>
+              <div class="color-picker-wrapper">
+                <input class="color-input-bubble" type="color" id="album-color" value="#7C3AED" />
+                <span id="color-hex-label" class="code-font" style="color: var(--text-secondary);">#7C3AED</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group mt-2">
+            <label class="form-label">Upload Event Logo (Optional)</label>
+            <div class="dropzone" id="logo-dropzone">
+              <i data-lucide="image-plus" class="mb-2" style="color: var(--text-secondary); width: 32px; height: 32px; margin: 0 auto;"></i>
+              <p style="font-size: 14px; font-weight: 500; color: var(--text-primary);">Click or Drag Logo Image here</p>
+              <p style="font-size: 12px; color: var(--text-muted);">PNG, JPG up to 2MB</p>
+              <input type="file" id="logo-file-input" accept="image/*" style="display: none;" />
+              <div id="logo-preview-container" class="mt-4 flex items-center justify-center gap-3" style="display: none;">
+                <img id="logo-preview-img" src="" alt="Logo Preview" style="max-height: 50px; border-radius: 4px; border: 1px solid var(--border-soft);" />
+                <button type="button" id="remove-logo-btn" class="btn-danger" style="padding: 4px 8px; font-size: 11px;">Remove</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between card mt-6" style="padding: 16px; background: rgba(20, 20, 20, 0.4);">
+            <div class="flex flex-col">
+              <span class="form-label" style="margin-bottom: 0;">Allow Video Uploads</span>
+              <span style="font-size: 12px; color: var(--text-muted);">Let guests upload recorded video loops up to 10s</span>
+            </div>
+            <label class="toggle-container">
+              <input type="checkbox" id="allow-video" checked style="display: none;" />
+              <div class="toggle-switch"></div>
+            </label>
+          </div>
+
+          <div class="mt-8">
+            <button type="submit" id="submit-btn" class="btn-primary" style="width: 100%; height: 48px;">
+              <span id="btn-text">Create Album & Generate QR</span>
+              <span id="btn-spinner" class="spinner" style="display: none;"></span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Successful Creation Result State -->
+      <div id="success-section" class="success-card card">
+        <i data-lucide="party-popper" class="mb-4 text-gradient" style="width: 54px; height: 54px; margin: 0 auto;"></i>
+        <h2 class="mb-2">Your Album is Ready!</h2>
+        <p style="color: var(--text-secondary);">Event ID: <span id="success-event-id" class="code-font text-gradient" style="font-weight: 700;">EVT-20260625-XYZ</span></p>
+
+        <!-- Downloadable QR Code Panel -->
+        <div class="qr-wrapper">
+          <div id="qrcode-canvas"></div>
+        </div>
+        <p style="font-size: 13px; color: var(--text-muted);" class="mb-4">Display this QR code at the reception or dinner tables for instant guest uploads.</p>
+        
+        <div class="flex justify-center gap-3 mb-6">
+          <button id="download-qr-btn" class="btn-primary">
+            <i data-lucide="download"></i> Download QR
+          </button>
+          <a id="go-to-album-btn" href="" class="btn-secondary">
+            <i data-lucide="external-link"></i> Go to Guest Album
+          </a>
+        </div>
+
+        <hr style="border: none; border-top: 1px solid var(--border-soft); margin: var(--space-6) 0;" />
+
+        <h3 class="mb-2" style="text-align: left;">Share & Dashboard Access</h3>
+        
+        <!-- Live Shared Link -->
+        <div class="action-row">
+          <div style="text-align: left;">
+            <p class="form-label" style="margin-bottom: 0;">Guest Album Link</p>
+            <p id="success-album-url" class="code-font" style="font-size: 13px; color: var(--text-secondary); word-break: break-all;">https://momenthive.in/album.html?id=...</p>
+          </div>
+          <button id="copy-album-link-btn" class="btn-secondary" style="padding: 8px 14px; font-size: 13px;">
+            <i data-lucide="copy" style="width: 16px; height: 16px;"></i> Copy
+          </button>
+        </div>
+
+        <!-- WhatsApp Share CTA -->
+        <div class="action-row">
+          <div style="text-align: left;">
+            <p class="form-label" style="margin-bottom: 0;">WhatsApp Broadcast</p>
+            <p style="font-size: 13px; color: var(--text-secondary);">Pre-fill invite text to broadcast to your guest groups</p>
+          </div>
+          <a id="whatsapp-share-btn" href="" target="_blank" class="btn-primary" style="background: #25D366; border-radius: 10px; font-size: 13px; padding: 10px 16px;">
+            <i data-lucide="message-square"></i> Share
+          </a>
+        </div>
+
+        <!-- Organizer Dashboard PIN -->
+        <div class="action-row" style="border-color: rgba(124, 58, 237, 0.4); background: rgba(124, 58, 237, 0.05);">
+          <div style="text-align: left;">
+            <p class="form-label" style="color: var(--hive-purple); margin-bottom: 0;">Organizer Dashboard Access</p>
+            <p style="font-size: 13px; color: var(--text-secondary);">Access code / PIN is the last 4 digits of your phone: <span id="success-dashboard-pin" class="code-font font-bold text-gradient"></span></p>
+          </div>
+          <a id="go-to-dashboard-btn" href="" class="btn-primary">
+            <i data-lucide="layout-dashboard"></i> Open Dashboard
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container flex flex-col md:flex-row justify-between items-center gap-4">
+        <div>
+          <span class="logo-text" style="font-size: 18px;">MomentHive</span>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">© 2026 MomentHive. India's first event guest photo album platform.</p>
+        </div>
+        <div style="font-size: 13px; color: var(--text-secondary);" class="flex items-center gap-4">
+          <span>Made in India 🇮🇳</span>
+          <span>|</span>
+          <a href="mailto:support@momenthive.in" style="color: var(--text-secondary); text-decoration: none;">support@momenthive.in</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- QRCode.js Library via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Supabase JS Client via CDN (must load before module scripts) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Create page JavaScript module -->
+    <script type="module" src="/js/create.js"></script>
+  </body>
+</html>
