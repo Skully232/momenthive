@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Event Photo Album — MomentHive</title>
+    <meta name="description" content="View and upload photos to this MomentHive shared event album. Scan the QR code or use your direct link — no app download required." />
     <!-- Brand Typography -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <!-- Brand CSS Stylesheet -->
@@ -53,7 +54,7 @@
   <body>
     <!-- Offline Notification banner -->
     <div id="offline-banner" class="offline-banner">
-      <i data-lucide="wifi-off"></i> Offline. Uploads will complete when connection returns.
+      <i data-lucide="wifi-off"></i> You are offline. Uploads will resume automatically when your connection returns.
     </div>
 
     <!-- Album Customized Header -->
@@ -106,11 +107,11 @@
       <!-- Gallery List View -->
       <div id="gallery-view" style="display: none;">
         <!-- Empty Album Slate -->
-        <div id="empty-gallery-slate" class="card text-center" style="padding: 60px 24px; display: none;">
-          <i data-lucide="camera" class="mb-4 text-gradient" style="width: 50px; height: 50px; margin: 0 auto; stroke-width: 1.5;"></i>
-          <h3 class="mb-2">No photos in this album yet</h3>
-          <p class="mb-6" style="color: var(--text-secondary); max-width: 400px; margin-left: auto; margin-right: auto;">Be the first to share your beautiful snapshots with the host! Click the button below to upload.</p>
-          <button class="btn-primary start-upload-btn-trigger">
+        <div id="empty-gallery-slate" class="card text-center" style="padding: 72px 24px; display: none; max-width: 480px; margin: 32px auto;">
+          <i data-lucide="camera" class="mb-4 text-gradient" style="width: 52px; height: 52px; margin: 0 auto; stroke-width: 1.5;"></i>
+          <h3 class="mb-2" style="font-size: 20px;">No photos yet — be first!</h3>
+          <p class="mb-6" style="color: var(--text-secondary); max-width: 340px; margin-left: auto; margin-right: auto; font-size: 14px; line-height: 1.65;">Be the first to share a memory from this event. Tap the button below to upload your photos instantly.</p>
+          <button class="btn-primary start-upload-btn-trigger" style="border-radius: 10px; padding: 12px 24px; font-size: 15px;">
             <i data-lucide="image-plus"></i> Upload Photos
           </button>
         </div>

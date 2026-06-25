@@ -112,6 +112,23 @@ h4 {
 .mt-3 { margin-top: var(--space-3); }
 .mt-4 { margin-top: var(--space-4); }
 .mt-6 { margin-top: var(--space-6); }
+.mt-8 { margin-top: var(--space-8); }
+.mt-16 { margin-top: var(--space-16); }
+.text-center { text-align: center; }
+.font-bold { font-weight: 700; }
+.font-heading { font-family: 'Plus Jakarta Sans', sans-serif; }
+.w-full { width: 100%; }
+
+/* Responsive flex-row on sm+ */
+@media (min-width: 640px) {
+  .sm\:flex-row { flex-direction: row; }
+}
+
+/* Responsive display helpers */
+@media (min-width: 768px) {
+  .md\:flex-row { flex-direction: row; }
+  .md\:items-center { align-items: center; }
+}
 
 /* Common Structural Layouts */
 .container {

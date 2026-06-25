@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MomentHive — India's Guest Photo Album Platform</title>
+  <meta name="description" content="MomentHive lets every guest share their photos from your Indian wedding, concert, or party — no app download needed. Create your shared album, share the QR code, and watch memories flow in live." />
   <!-- Brand Typography -->
   <link
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
@@ -12,77 +13,736 @@
   <!-- Brand CSS Stylesheet -->
   <link rel="stylesheet" href="/css/style.css" />
   <style>
-    /* Page specific enhancements for the landing page */
+    /* ===== LANDING PAGE SPECIFIC ===== */
+
+    /* Nav links */
+    .nav-links {
+      display: none;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+    @media (min-width: 768px) {
+      .nav-links { display: flex; }
+    }
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text-primary); }
+
+    /* Hero */
     .hero-section {
       position: relative;
-      padding: 120px 0 80px 0;
+      padding: 100px 0 60px;
       text-align: center;
       overflow: hidden;
     }
-
-    .feature-grid {
-      grid-template-columns: repeat(1, minmax(0, 1fr));
-    }
-
-    @media (min-width: 640px) {
-      .feature-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media (min-width: 1024px) {
-      .feature-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-    }
-
-    .pricing-grid {
-      grid-template-columns: repeat(1, minmax(0, 1fr));
-      max-width: 900px;
-      margin: 0 auto;
-      gap: var(--space-6);
-    }
-
-    @media (min-width: 768px) {
-      .pricing-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-    }
-
-    .how-step {
-      position: relative;
-      text-align: center;
-      padding: var(--space-6);
-    }
-
-    .how-number {
+    .hero-section h1 { font-size: clamp(32px, 5vw, 60px); }
+    .eyebrow-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(124, 58, 237, 0.1);
+      border: 1px solid rgba(124, 58, 237, 0.3);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #A78BFA;
+      margin-bottom: 24px;
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 36px;
+    }
+    .eyebrow-badge .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--memory-pink);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+    .hero-subhead {
+      font-size: clamp(16px, 2.5vw, 20px);
+      color: var(--text-secondary);
+      max-width: 620px;
+      margin: 0 auto 36px;
+      line-height: 1.65;
+    }
+    .hero-ctas {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+    .btn-primary-lg {
+      background: var(--gradient-primary);
+      border-radius: 10px;
+      padding: 14px 28px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      color: white;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      text-decoration: none;
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.35);
+    }
+    .btn-primary-lg:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+      box-shadow: 0 12px 28px rgba(124, 58, 237, 0.45);
+    }
+    .btn-secondary-outline {
+      background: transparent;
+      border: 1px solid var(--border-soft);
+      color: var(--text-primary);
+      border-radius: 10px;
+      padding: 14px 28px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+      text-decoration: none;
+    }
+    .btn-secondary-outline:hover {
+      border-color: var(--hive-purple);
+      transform: translateY(-1px);
+    }
+
+    /* Honest stats row */
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding-top: 48px;
+      border-top: 1px solid var(--border-soft);
+    }
+    .hero-stat {
+      text-align: left;
+      border-left: 2px solid;
+      padding-left: 16px;
+    }
+    .hero-stat:nth-child(1) { border-color: var(--hive-purple); }
+    .hero-stat:nth-child(2) { border-color: var(--memory-pink); }
+    .hero-stat:nth-child(3) { border-color: #059669; }
+    .hero-stat-val {
+      font-size: 22px;
       font-weight: 800;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--text-primary);
+    }
+    .hero-stat-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    /* ===== HORIZONTAL AUTO-SCROLL STRIP ===== */
+    .album-strip-section {
+      padding: 48px 0;
+      overflow: hidden;
+      position: relative;
+    }
+    .album-strip-section::before,
+    .album-strip-section::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 80px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .album-strip-section::before {
+      left: 0;
+      background: linear-gradient(to right, var(--bg-deep-black) 0%, transparent 100%);
+    }
+    .album-strip-section::after {
+      right: 0;
+      background: linear-gradient(to left, var(--bg-deep-black) 0%, transparent 100%);
+    }
+    .album-strip-track {
+      display: flex;
+      gap: 16px;
+      width: max-content;
+      animation: strip-scroll 35s linear infinite;
+    }
+    .album-strip-track:hover { animation-play-state: paused; }
+    @media (prefers-reduced-motion: reduce) {
+      .album-strip-track { animation: none; }
+    }
+    @keyframes strip-scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .album-thumb {
+      width: 160px;
+      height: 120px;
+      border-radius: 12px;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 1px solid var(--border-soft);
+    }
+    @media (min-width: 768px) {
+      .album-thumb { width: 200px; height: 150px; }
+    }
+    .album-thumb img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    .album-thumb:hover img { transform: scale(1.05); }
+
+    /* ===== SECTION CONTAINERS ===== */
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--hive-purple);
+      margin-bottom: 12px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .section-title {
+      font-size: clamp(26px, 4vw, 40px);
+      font-weight: 800;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--text-primary);
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .section-desc {
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .section-header-centered { text-align: center; margin-bottom: 56px; }
+
+    /* Section reveals via IntersectionObserver */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
+
+    /* ===== HOW IT WORKS ===== */
+    .how-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    @media (min-width: 640px) { .how-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .how-grid { grid-template-columns: repeat(4, 1fr); } }
+
+    .how-step-card {
+      background: var(--bg-card-dark);
+      border: 1px solid var(--border-soft);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+    .how-step-card:hover {
+      border-color: rgba(124, 58, 237, 0.4);
+      transform: translateY(-4px);
+    }
+    .how-step-mockup {
+      height: 140px;
+      background: var(--bg-surface-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .how-step-mockup img {
+      width: 100%; height: 100%; object-fit: cover; opacity: 0.7;
+    }
+    .how-step-mockup-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(10,10,10,0.45);
+    }
+    .how-step-num-big {
+      font-size: 48px;
+      font-weight: 800;
+      font-family: 'Plus Jakarta Sans', sans-serif;
       background: var(--gradient-primary);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: var(--space-2);
+      line-height: 1;
+    }
+    .how-step-body {
+      padding: 20px;
+    }
+    .how-step-body h4 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .how-step-body p { font-size: 13px; color: var(--text-secondary); line-height: 1.55; }
+
+    /* ===== FEATURES GRID ===== */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    @media (min-width: 640px) { .feature-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .feature-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .feature-card {
+      background: var(--bg-card-dark);
+      border: 1px solid var(--border-soft);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+    .feature-card:hover {
+      border-color: rgba(124, 58, 237, 0.35);
+      transform: translateY(-3px);
+    }
+    .feature-card-visual {
+      height: 160px;
+      overflow: hidden;
+      position: relative;
+    }
+    .feature-card-visual img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .feature-card:hover .feature-card-visual img { transform: scale(1.06); }
+    .feature-card-visual-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(20,20,20,0.85) 100%);
+    }
+    .feature-card-body { padding: 20px; }
+    .feature-icon-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(124, 58, 237, 0.1);
+      border: 1px solid rgba(124, 58, 237, 0.2);
+      border-radius: 8px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #A78BFA;
+      margin-bottom: 10px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .feature-card-body h4 { font-size: 16px; margin-bottom: 6px; }
+    .feature-card-body p { font-size: 13px; color: var(--text-secondary); line-height: 1.55; }
+    .coming-soon-tag {
+      display: inline-block;
+      background: rgba(219, 39, 119, 0.1);
+      border: 1px solid rgba(219, 39, 119, 0.25);
+      color: #F472B6;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 6px;
+      vertical-align: middle;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* ===== BUILT FOR INDIA ===== */
+    .india-section {
+      background: var(--bg-card-dark);
+      border: 1px solid var(--border-soft);
+      border-radius: 24px;
+      padding: 56px 40px;
+    }
+    @media (max-width: 640px) { .india-section { padding: 36px 24px; } }
+    .india-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      margin-top: 48px;
+    }
+    @media (min-width: 768px) { .india-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .india-grid { grid-template-columns: repeat(4, 1fr); } }
+    .india-callout {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .india-callout-icon {
+      font-size: 28px;
+      line-height: 1;
+    }
+    .india-callout h4 { font-size: 15px; font-weight: 700; }
+    .india-callout p { font-size: 13px; color: var(--text-secondary); line-height: 1.55; }
+
+    /* ===== PRICING ===== */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    @media (min-width: 768px) { .pricing-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .pricing-card {
+      background: var(--bg-card-dark);
+      border: 1px solid var(--border-soft);
+      border-radius: 16px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .pricing-card:hover {
+      transform: translateY(-3px);
+    }
+    .pricing-card.popular {
+      border-color: var(--hive-purple);
+      background: linear-gradient(135deg, var(--bg-card-dark) 0%, rgba(124, 58, 237, 0.06) 100%);
+    }
+    .popular-ribbon {
+      position: absolute;
+      top: 14px; right: -22px;
+      background: var(--gradient-primary);
+      color: white;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 4px 28px;
+      transform: rotate(45deg);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .pricing-tier-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .pricing-amount {
+      font-size: 36px;
+      font-weight: 800;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--text-primary);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .pricing-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    .pricing-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .pricing-features li {
+      font-size: 13px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.4;
+    }
+    .pricing-features li::before {
+      content: '✓';
+      font-weight: 700;
+      color: var(--hive-purple);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ===== SOCIAL PROOF / HONEST SECTION ===== */
+    .proof-section {
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.05) 0%, rgba(219, 39, 119, 0.05) 100%);
+      border: 1px solid var(--border-soft);
+      border-radius: 24px;
+      padding: 56px 40px;
+      text-align: center;
+    }
+    @media (max-width: 640px) { .proof-section { padding: 36px 24px; } }
+    .partner-slots-row {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 36px 0;
+    }
+    .partner-slot {
+      width: 120px;
+      height: 56px;
+      border: 1.5px dashed var(--border-soft);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .founder-note {
+      max-width: 600px;
+      margin: 0 auto;
+      background: var(--bg-card-dark);
+      border: 1px solid var(--border-soft);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: left;
+    }
+    .founder-note p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      font-style: italic;
+    }
+    .founder-note .founder-sig {
+      margin-top: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-style: normal;
+    }
+
+    /* ===== FINAL CTA ===== */
+    .final-cta-section {
+      text-align: center;
+      padding: 80px 0;
+      position: relative;
+    }
+    .final-cta-glow {
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 200px;
+      background: radial-gradient(circle, rgba(219, 39, 119, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    @media (min-width: 768px) {
+      .footer-grid { grid-template-columns: 2fr 1fr 1fr; }
+    }
+    .footer-links-heading {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .footer-links-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .footer-links-list a {
+      font-size: 14px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links-list a:hover { color: var(--text-primary); }
+    .footer-divider {
+      border: none;
+      border-top: 1px solid var(--border-soft);
+      margin: 32px 0 20px;
+    }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-bottom-text {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ===== APP MOCKUP ===== */
+    .mockup-browser {
+      background: var(--bg-card-dark);
+      border: 1px solid var(--border-soft);
+      border-radius: 12px;
+      overflow: hidden;
+      max-width: 340px;
+      margin: 0 auto;
+    }
+    .mockup-browser-bar {
+      background: var(--bg-surface-dark);
+      border-bottom: 1px solid var(--border-soft);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .mockup-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .mockup-dot-r { background: #DC2626; }
+    .mockup-dot-y { background: #D97706; }
+    .mockup-dot-g { background: #059669; }
+    .mockup-url-bar {
+      flex: 1;
+      background: var(--bg-card-dark);
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 10px;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      margin-left: 8px;
+    }
+    .mockup-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+      padding: 3px;
+    }
+    .mockup-grid-img {
+      aspect-ratio: 1;
+      overflow: hidden;
+    }
+    .mockup-grid-img img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+
+    /* QR Scan mockup */
+    .qr-mockup {
+      background: var(--bg-card-dark);
+      border: 1px solid var(--border-soft);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      max-width: 200px;
+      margin: 0 auto;
+    }
+    .qr-mockup-square {
+      width: 100px;
+      height: 100px;
+      background: white;
+      border-radius: 8px;
+      margin: 0 auto 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .qr-pattern {
+      width: 80px;
+      height: 80px;
+      /* CSS QR pattern simulation */
+      background-image:
+        linear-gradient(#000 0%, #000 100%),
+        linear-gradient(#fff 0%, #fff 100%);
+      background-size: 10px 10px;
+      background-position: 0 0, 5px 5px;
+    }
+
+    /* stat cards mockup */
+    .stat-mockup-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .stat-mockup-card {
+      flex: 1;
+      background: var(--bg-surface-dark);
+      border: 1px solid var(--border-soft);
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+    }
+    .stat-mockup-val {
+      font-size: 18px;
+      font-weight: 800;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .stat-mockup-lbl {
+      font-size: 9px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
     }
   </style>
 </head>
 
 <body>
-  <!-- Offline Notification banner -->
+  <!-- Offline Notification banner (CSS default: display:none; only shown on real offline event) -->
   <div id="offline-banner" class="offline-banner">
-    <i data-lucide="wifi-off"></i> You are currently offline. MomentHive is running in offline mode.
+    <i data-lucide="wifi-off"></i> You are currently offline. MomentHive requires an internet connection to upload photos.
   </div>
 
-  <!-- Main Navigation Header -->
+  <!-- ===== STICKY NAVIGATION ===== -->
   <header id="app-header">
     <div class="container flex justify-between items-center">
-      <a href="index.html" class="logo-text">
-        <i data-lucide="aperture" style="stroke: url(#purple-pink-grad); width: 28px; height: 28px;"></i>
+      <a href="index.html" class="logo-text" id="nav-logo">
+        <i data-lucide="aperture" style="stroke: url(#purple-pink-grad); width: 26px; height: 26px;"></i>
         MomentHive
       </a>
-      <nav class="flex items-center gap-4">
-        <a href="create.html" class="btn-primary">Create Album</a>
+      <!-- Desktop nav links -->
+      <nav aria-label="Main navigation">
+        <ul class="nav-links">
+          <li><a href="#how-it-works">How It Works</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+        </ul>
       </nav>
+      <a href="create.html" class="btn-primary-lg" id="nav-create-cta" style="padding: 10px 20px; font-size: 14px;">
+        <i data-lucide="plus" style="width: 16px; height: 16px;"></i> Create Album
+      </a>
     </div>
   </header>
 
@@ -96,223 +756,474 @@
     </defs>
   </svg>
 
-  <!-- Hero Section -->
+  <!-- ===== HERO SECTION ===== -->
   <section class="hero-section">
     <div class="hero-glow"></div>
     <div class="container">
-      <div class="badge mb-4">
-        <span class="badge-pink">New</span> WhatsApp-First Photo Sharing
+      <!-- Eyebrow badge -->
+      <div class="eyebrow-badge" aria-label="New feature">
+        <span class="dot"></span>
+        WhatsApp-First Guest Photo Sharing — Made in India 🇮🇳
       </div>
+
+      <!-- H1 -->
       <h1 class="mb-4">
-        Every Guest Photo From Your Event,<br />
-        <span class="text-gradient">In One Shared Place.</span>
+        Every Guest Photo From<br>Your Event,
+        <span class="text-gradient"> In One Shared Place.</span>
       </h1>
-      <p class="mb-8"
-        style="font-size: 18px; color: var(--text-secondary); max-width: 600px; margin-left: auto; margin-right: auto;">
-        The ultimate guest photo platform for Indian weddings, parties, and concerts. No app download required. Direct
-        uploads via web, shared instantly via QR code.
+
+      <!-- Subhead -->
+      <p class="hero-subhead">
+        Share a QR code. Guests scan and upload instantly — no app download, no login friction. Your memories, collected live.
       </p>
-      <div class="flex justify-center gap-4 flex-col sm:flex-row">
-        <a href="create.html" class="btn-primary">
-          <i data-lucide="plus"></i> Create Your Album Free
+
+      <!-- CTAs -->
+      <div class="hero-ctas">
+        <a href="create.html" class="btn-primary-lg" id="hero-create-cta">
+          <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
+          Create Your Album Free
         </a>
-        <a href="#how-it-works" class="btn-secondary">
+        <a href="#how-it-works" class="btn-secondary-outline" id="hero-hiw-cta">
+          <i data-lucide="play-circle" style="width: 16px; height: 16px;"></i>
           How It Works
         </a>
       </div>
 
-      <div style="margin-top: 48px; display: flex; gap: 32px; justify-content: center;">
-        <div style="border-left: 2px solid var(--hive-purple); padding-left: 16px; text-align: left;">
-          <div
-            style="font-size: 24px; font-weight: 700; font-family: 'Plus Jakarta Sans', sans-serif; color: var(--text-primary);">
-            ₹0</div>
-          <div
-            style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">
-            Start for free</div>
+      <!-- Honest stats -->
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-val">₹0</div>
+          <div class="hero-stat-label">To start free</div>
         </div>
-        <div style="border-left: 2px solid var(--memory-pink); padding-left: 16px; text-align: left;">
-          <div
-            style="font-size: 24px; font-weight: 700; font-family: 'Plus Jakarta Sans', sans-serif; color: var(--text-primary);">
-            100%</div>
-          <div
-            style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">
-            Indian Made</div>
+        <div class="hero-stat">
+          <div class="hero-stat-val">No App</div>
+          <div class="hero-stat-label">Required for guests</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-val">Live</div>
+          <div class="hero-stat-label">Real-time gallery</div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- ===== HORIZONTAL AUTO-SCROLLING ALBUM STRIP ===== -->
+  <!-- PLACEHOLDER — replace with real event photography before public launch -->
+  <div class="album-strip-section" aria-hidden="true">
+    <div class="album-strip-track" id="album-strip-track">
+      <!-- Set A (real images via picsum with descriptive seeds) -->
+      <div class="album-thumb"><img src="https://picsum.photos/seed/indian-wedding-mehendi/400/300" alt="" loading="lazy"></div>
+      <div class="album-thumb"><img src="https://picsum.photos/seed/wedding-sangeet-dance/400/300" alt="" loading="lazy"></div>
+      <div class="album-thumb"><img src="https://picsum.photos/seed/concert-crowd-lights/400/300" alt="" loading="lazy"></div>
+      <div class="album-thumb"><img src="https://picsum.photos/seed/birthday-celebration-candles/400/300" alt="" loading="lazy"></div>
+      <div class="album-thumb"><img src="https://picsum.photos/seed/college-fest-performance/400/300" alt="" loading="lazy"></div>
+      <div class="album-thumb"><img src="https://picsum.photos/seed/wedding-baraat-procession/400/300" alt="" loading="lazy"></div>
+      <div class="album-thumb"><img src="https://picsum.photos/seed/event-stage-spotlights/400/300" alt="" loading="lazy"></div>
+      <div class="album-thumb"><img src="https://picsum.photos/seed/corporate-product-launch/400/300" alt="" loading="lazy"></div>
+      <div class="album-thumb"><img src="https://picsum.photos/seed/friends-party-outdoor/400/300" alt="" loading="lazy"></div>
+      <div class="album-thumb"><img src="https://picsum.photos/seed/wedding-reception-decor/400/300" alt="" loading="lazy"></div>
+      <!-- Set B — duplicate for seamless infinite loop -->
+      <div class="album-thumb"><img src="https://picsum.photos/seed/indian-wedding-mehendi/400/300" alt="" loading="lazy"></div>
+      <div class="album-thumb"><img src="https://picsum.photos/seed/wedding-sangeet-dance/400/300" alt="" loading="lazy"></div>
+      <div class="album-thumb"><img src="https://picsum.photos/seed/concert-crowd-lights/400/300" alt="" loading="lazy"></div>
+      <div class="album-thumb"><img src="https://picsum.photos/seed/birthday-celebration-candles/400/300" alt="" loading="lazy"></div>
+      <div class="album-thumb"><img src="https://picsum.photos/seed/college-fest-performance/400/300" alt="" loading="lazy"></div>
+      <div class="album-thumb"><img src="https://picsum.photos/seed/wedding-baraat-procession/400/300" alt="" loading="lazy"></div>
+      <div class="album-thumb"><img src="https://picsum.photos/seed/event-stage-spotlights/400/300" alt="" loading="lazy"></div>
+      <div class="album-thumb"><img src="https://picsum.photos/seed/corporate-product-launch/400/300" alt="" loading="lazy"></div>
+      <div class="album-thumb"><img src="https://picsum.photos/seed/friends-party-outdoor/400/300" alt="" loading="lazy"></div>
+      <div class="album-thumb"><img src="https://picsum.photos/seed/wedding-reception-decor/400/300" alt="" loading="lazy"></div>
+    </div>
+  </div>
 
-  <!-- How It Works Section -->
-  <section id="how-it-works" class="mb-16 mt-8">
+  <!-- ===== HOW IT WORKS ===== -->
+  <section id="how-it-works" style="padding: 80px 0;">
     <div class="container">
-      <h2 class="mb-12" style="text-align: center;">How It Works</h2>
-      <div class="grid grid-cols-1 grid-cols-sm-2 grid-cols-md-4 gap-6">
-        <div class="card how-step">
-          <div class="how-number">1</div>
-          <h4 class="mb-2">Create</h4>
-          <p style="font-size: 14px; color: var(--text-secondary);">Enter event details and launch your album instantly.
-          </p>
+      <div class="section-header-centered reveal">
+        <div class="section-label">Simple by design</div>
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-desc">Four steps from zero to a live shared gallery — no technical setup required.</p>
+      </div>
+
+      <div class="how-grid">
+        <!-- Step 1 -->
+        <div class="how-step-card reveal">
+          <div class="how-step-mockup">
+            <!-- PLACEHOLDER — replace with real screenshot of create form -->
+            <img src="https://picsum.photos/seed/laptop-form-dark/600/300" alt="">
+            <div class="how-step-mockup-overlay">
+              <span class="how-step-num-big">1</span>
+            </div>
+          </div>
+          <div class="how-step-body">
+            <h4>Create Your Album</h4>
+            <p>Enter event details, set a password if needed, and launch your album in under 60 seconds.</p>
+          </div>
         </div>
-        <div class="card how-step">
-          <div class="how-number">2</div>
-          <h4 class="mb-2">Share QR</h4>
-          <p style="font-size: 14px; color: var(--text-secondary);">Display QR code at the entry, dinner tables, or
-            stage.</p>
+
+        <!-- Step 2 -->
+        <div class="how-step-card reveal">
+          <div class="how-step-mockup">
+            <!-- PLACEHOLDER -->
+            <img src="https://picsum.photos/seed/qr-code-phone-scan/600/300" alt="">
+            <div class="how-step-mockup-overlay">
+              <span class="how-step-num-big">2</span>
+            </div>
+          </div>
+          <div class="how-step-body">
+            <h4>Share the QR Code</h4>
+            <p>Download the generated QR code and display it at entry gates, dinner tables, and the stage.</p>
+          </div>
         </div>
-        <div class="card how-step">
-          <div class="how-number">3</div>
-          <h4 class="mb-2">Guests Upload</h4>
-          <p style="font-size: 14px; color: var(--text-secondary);">Guests scan and upload multiple photos. No app
-            needed.</p>
+
+        <!-- Step 3 -->
+        <div class="how-step-card reveal">
+          <div class="how-step-mockup">
+            <!-- PLACEHOLDER -->
+            <img src="https://picsum.photos/seed/smartphone-camera-upload/600/300" alt="">
+            <div class="how-step-mockup-overlay">
+              <span class="how-step-num-big">3</span>
+            </div>
+          </div>
+          <div class="how-step-body">
+            <h4>Guests Upload Instantly</h4>
+            <p>Guests scan and upload multiple photos directly from their phone browser — no app needed.</p>
+          </div>
         </div>
-        <div class="card how-step">
-          <div class="how-number">4</div>
-          <h4 class="mb-2">Live Gallery</h4>
-          <p style="font-size: 14px; color: var(--text-secondary);">View real-time stream of memories or download all as
-            zip.</p>
+
+        <!-- Step 4 -->
+        <div class="how-step-card reveal">
+          <div class="how-step-mockup">
+            <!-- PLACEHOLDER — HTML/CSS mockup of masonry gallery -->
+            <div style="width:100%; height:100%; padding:8px; overflow:hidden;">
+              <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:4px; height:100%;">
+                <img src="https://picsum.photos/seed/gallery-thumb-a/200/200" style="width:100%;height:100%;object-fit:cover;border-radius:4px;" alt="">
+                <img src="https://picsum.photos/seed/gallery-thumb-b/200/200" style="width:100%;height:100%;object-fit:cover;border-radius:4px;" alt="">
+                <img src="https://picsum.photos/seed/gallery-thumb-c/200/200" style="width:100%;height:100%;object-fit:cover;border-radius:4px;" alt="">
+              </div>
+            </div>
+            <div class="how-step-mockup-overlay" style="background: rgba(10,10,10,0.35);">
+              <span class="how-step-num-big">4</span>
+            </div>
+          </div>
+          <div class="how-step-body">
+            <h4>Live Gallery — Instantly</h4>
+            <p>Watch the real-time memory stream grow. Download all photos as a ZIP at the end.</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Features Section -->
-  <section class="mb-16">
+  <!-- ===== FEATURES ===== -->
+  <section id="features" style="padding: 80px 0; background: rgba(20,20,20,0.3);">
     <div class="container">
-      <h2 class="mb-12" style="text-align: center;">Crafted Features For Indian Events</h2>
-      <div class="grid feature-grid gap-6">
-        <div class="card">
-          <i data-lucide="zap" class="mb-4" style="color: var(--hive-purple); width: 28px; height: 28px;"></i>
-          <h4 class="mb-2">Real-Time Sync</h4>
-          <p style="font-size: 14px; color: var(--text-secondary);">Photos populate the masonry gallery live via
-            Supabase Realtime. Instant feedback!</p>
+      <div class="section-header-centered reveal">
+        <div class="section-label">Platform capabilities</div>
+        <h2 class="section-title">Crafted for Indian Events</h2>
+        <p class="section-desc">Every feature built for the chaos, joy, and scale of Indian celebrations.</p>
+      </div>
+
+      <div class="feature-grid">
+        <!-- Feature 1: Real-Time Sync -->
+        <div class="feature-card reveal">
+          <div class="feature-card-visual">
+            <!-- PLACEHOLDER -->
+            <img src="https://picsum.photos/seed/realtime-live-dashboard/600/320" alt="">
+            <div class="feature-card-visual-overlay"></div>
+          </div>
+          <div class="feature-card-body">
+            <div class="feature-icon-pill">
+              <i data-lucide="zap" style="width: 11px; height: 11px;"></i> Live
+            </div>
+            <h4>Real-Time Sync</h4>
+            <p>Photos populate the masonry gallery the instant they're uploaded via Supabase Realtime — no refresh needed.</p>
+          </div>
         </div>
-        <div class="card">
-          <i data-lucide="smartphone" class="mb-4" style="color: var(--memory-pink); width: 28px; height: 28px;"></i>
-          <h4 class="mb-2">Zero App Download</h4>
-          <p style="font-size: 14px; color: var(--text-secondary);">Guests upload from any mobile browser. Keeps the
-            sharing friction extremely low.</p>
+
+        <!-- Feature 2: Zero App Download -->
+        <div class="feature-card reveal">
+          <div class="feature-card-visual">
+            <!-- PLACEHOLDER -->
+            <img src="https://picsum.photos/seed/mobile-browser-upload/600/320" alt="">
+            <div class="feature-card-visual-overlay"></div>
+          </div>
+          <div class="feature-card-body">
+            <div class="feature-icon-pill">
+              <i data-lucide="smartphone" style="width: 11px; height: 11px;"></i> Zero Friction
+            </div>
+            <h4>Zero App Download</h4>
+            <p>Guests upload from any mobile browser — iOS, Android, any device. No app store, no accounts, no friction.</p>
+          </div>
         </div>
-        <div class="card">
-          <i data-lucide="scan-face" class="mb-4" style="color: var(--success-green); width: 28px; height: 28px;"></i>
-          <h4 class="mb-2">AI Face Search</h4>
-          <p style="font-size: 14px; color: var(--text-secondary);">Guests can find all photos featuring themselves
-            using facial recognition (coming soon).</p>
+
+        <!-- Feature 3: WhatsApp-First -->
+        <div class="feature-card reveal">
+          <div class="feature-card-visual">
+            <!-- PLACEHOLDER -->
+            <img src="https://picsum.photos/seed/whatsapp-share-mobile/600/320" alt="">
+            <div class="feature-card-visual-overlay"></div>
+          </div>
+          <div class="feature-card-body">
+            <div class="feature-icon-pill">
+              <i data-lucide="message-square" style="width: 11px; height: 11px;"></i> WhatsApp-First
+            </div>
+            <h4>WhatsApp-First Sharing</h4>
+            <p>One-tap WhatsApp broadcast with pre-filled message. Your album link reaches every guest in your groups instantly.</p>
+          </div>
         </div>
-        <div class="card">
-          <i data-lucide="message-square" class="mb-4" style="color: var(--info-blue); width: 28px; height: 28px;"></i>
-          <h4 class="mb-2">WhatsApp-First Design</h4>
-          <p style="font-size: 14px; color: var(--text-secondary);">Instant sharing pre-fills, simple phone
-            authentication, and tailored mobile-friendly UI.</p>
+
+        <!-- Feature 4: AI Face Search (Coming Phase 2) -->
+        <div class="feature-card reveal">
+          <div class="feature-card-visual">
+            <!-- PLACEHOLDER -->
+            <img src="https://picsum.photos/seed/ai-face-recognition-scan/600/320" alt="">
+            <div class="feature-card-visual-overlay"></div>
+          </div>
+          <div class="feature-card-body">
+            <div class="feature-icon-pill">
+              <i data-lucide="scan-face" style="width: 11px; height: 11px;"></i> AI
+            </div>
+            <h4>AI Face Search <span class="coming-soon-tag">Phase 2</span></h4>
+            <p>Guests will find every photo featuring themselves using facial recognition — coming in a future release.</p>
+          </div>
         </div>
-        <div class="card">
-          <i data-lucide="brush" class="mb-4" style="color: var(--warning-amber); width: 28px; height: 28px;"></i>
-          <h4 class="mb-2">Branded Album</h4>
-          <p style="font-size: 14px; color: var(--text-secondary);">Upload your event logo, and customize color schemes
-            to match your wedding card or brand.</p>
+
+        <!-- Feature 5: Branded Album -->
+        <div class="feature-card reveal">
+          <div class="feature-card-visual">
+            <!-- PLACEHOLDER -->
+            <img src="https://picsum.photos/seed/brand-logo-event-decor/600/320" alt="">
+            <div class="feature-card-visual-overlay"></div>
+          </div>
+          <div class="feature-card-body">
+            <div class="feature-icon-pill">
+              <i data-lucide="brush" style="width: 11px; height: 11px;"></i> Custom
+            </div>
+            <h4>Branded Albums</h4>
+            <p>Upload your event logo and choose a primary colour. Your album feels like yours, not a generic SaaS tool.</p>
+          </div>
         </div>
-        <div class="card">
-          <i data-lucide="award" class="mb-4" style="color: #A78BFA; width: 28px; height: 28px;"></i>
-          <h4 class="mb-2">Sponsor & Host Ready</h4>
-          <p style="font-size: 14px; color: var(--text-secondary);">Show sponsor banners, manage flags, delete unwanted
-            photos, and download all as a ZIP.</p>
+
+        <!-- Feature 6: Organizer Dashboard -->
+        <div class="feature-card reveal">
+          <div class="feature-card-visual">
+            <!-- PLACEHOLDER — HTML/CSS mockup of dashboard stats -->
+            <div style="padding: 16px; background: var(--bg-surface-dark);">
+              <div class="stat-mockup-row">
+                <div class="stat-mockup-card">
+                  <div class="stat-mockup-val">247</div>
+                  <div class="stat-mockup-lbl">Photos</div>
+                </div>
+                <div class="stat-mockup-card">
+                  <div class="stat-mockup-val">83</div>
+                  <div class="stat-mockup-lbl">Guests</div>
+                </div>
+                <div class="stat-mockup-card">
+                  <div class="stat-mockup-val">12</div>
+                  <div class="stat-mockup-lbl">Videos</div>
+                </div>
+              </div>
+              <div style="background: var(--bg-card-dark); border-radius: 6px; height: 80px; display:flex; align-items:center; justify-content:center;">
+                <div style="font-size:11px; color:var(--text-muted); text-align:center;">
+                  <div style="font-size:20px; margin-bottom:4px;">📊</div>
+                  Photo Stream Moderation
+                </div>
+              </div>
+            </div>
+            <!-- PLACEHOLDER — replace with real dashboard screenshot -->
+            <div class="feature-card-visual-overlay" style="background: linear-gradient(to bottom, transparent 40%, rgba(20,20,20,0.9) 100%);"></div>
+          </div>
+          <div class="feature-card-body">
+            <div class="feature-icon-pill">
+              <i data-lucide="layout-dashboard" style="width: 11px; height: 11px;"></i> Admin
+            </div>
+            <h4>Organizer Dashboard</h4>
+            <p>Moderate photos, view guest list, manage album status, download all as ZIP, and add sponsor branding.</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Pricing Section -->
-  <section class="mb-16">
+  <!-- ===== BUILT FOR INDIAN EVENTS ===== -->
+  <section id="india" style="padding: 80px 0;">
     <div class="container">
-      <h2 class="mb-4" style="text-align: center;">Simple, Transparent Pricing</h2>
-      <p class="mb-12" style="text-align: center; color: var(--text-secondary);">Choose the perfect scale for your
-        memory celebration.</p>
-      <div class="grid pricing-grid">
-        <div class="card flex flex-col justify-between">
+      <div class="india-section reveal">
+        <div class="section-header-centered" style="margin-bottom: 0;">
+          <div class="section-label">Built in Bangalore, for India</div>
+          <h2 class="section-title">Designed for the Way<br>India Celebrates</h2>
+          <p class="section-desc">India's events are louder, bigger, and more multi-day than anywhere else. We built for that.</p>
+        </div>
+
+        <div class="india-grid">
+          <div class="india-callout reveal">
+            <div class="india-callout-icon">💬</div>
+            <h4>WhatsApp-First Design</h4>
+            <p>Album links share naturally over WhatsApp groups. No email required, no app to install — exactly how Indian guests expect to receive things.</p>
+          </div>
+          <div class="india-callout reveal">
+            <div class="india-callout-icon">📱</div>
+            <h4>No-App, No-Login Uploads</h4>
+            <p>Any guest with a phone and mobile data can upload. No Play Store, no Apple ID, no OTP. Works on 4G and even 3G connections.</p>
+          </div>
+          <div class="india-callout reveal">
+            <div class="india-callout-icon">🔒</div>
+            <h4>Private Album Password</h4>
+            <p>Lock your album with a password — only guests who have the password or QR code can view or upload. Keeps family photos private.</p>
+          </div>
+          <div class="india-callout reveal">
+            <div class="india-callout-icon">🎉</div>
+            <h4>Multi-Event Ready</h4>
+            <p>Create a separate album for each ceremony — Mehendi, Sangeet, Reception — and share different QR codes per function. <span style="color: var(--hive-purple); font-weight: 600;">Coming soon: multi-day event grouping.</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PRICING ===== -->
+  <section id="pricing" style="padding: 80px 0; background: rgba(20,20,20,0.3);">
+    <div class="container">
+      <div class="section-header-centered reveal">
+        <div class="section-label">Transparent pricing</div>
+        <h2 class="section-title">Simple, Honest Pricing</h2>
+        <p class="section-desc">Start free. Scale when your event does.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <!-- Free Tier -->
+        <div class="pricing-card reveal">
           <div>
-            <h4 class="mb-1">Free Starter</h4>
-            <div class="mb-4" style="font-size: 24px; font-weight: 800; font-family: 'Plus Jakarta Sans';">₹0</div>
-            <ul class="mb-6"
-              style="font-size: 13px; color: var(--text-secondary); list-style-type: none; display: flex; flex-direction: column; gap: 8px;">
-              <li><i data-lucide="check"
-                  style="width: 14px; height: 14px; color: var(--success-green); display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
-                Up to 50 Photos</li>
-              <li><i data-lucide="check"
-                  style="width: 14px; height: 14px; color: var(--success-green); display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
-                Base Layout</li>
-              <li><i data-lucide="check"
-                  style="width: 14px; height: 14px; color: var(--success-green); display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
-                Standard QR Code</li>
+            <div class="pricing-tier-name">Free Starter</div>
+            <div class="pricing-amount">₹0</div>
+            <div class="pricing-desc">Per event · forever free</div>
+            <ul class="pricing-features">
+              <li>Up to 50 photos per album</li>
+              <li>QR code generation</li>
+              <li>Real-time guest gallery</li>
+              <li>MomentHive branding</li>
             </ul>
           </div>
-          <a href="create.html" class="btn-secondary" style="width: 100%;">Create Free</a>
+          <a href="create.html" class="btn-secondary-outline" style="width: 100%; justify-content: center;" id="pricing-free-cta">Create Free Album</a>
         </div>
-        <div class="card flex flex-col justify-between"
-          style="border-color: var(--hive-purple); position: relative; overflow: hidden;">
-          <div
-            style="position: absolute; top: 12px; right: -24px; background: var(--gradient-primary); color: white; font-size: 10px; font-weight: 700; padding: 4px 24px; transform: rotate(45deg); text-transform: uppercase;">
-            Popular</div>
+
+        <!-- Starter Album (Popular) -->
+        <div class="pricing-card popular reveal">
+          <div class="popular-ribbon">Popular</div>
           <div>
-            <h4 class="mb-1">Starter Album</h4>
-            <div class="mb-4" style="font-size: 24px; font-weight: 800; font-family: 'Plus Jakarta Sans';">₹999</div>
-            <ul class="mb-6"
-              style="font-size: 13px; color: var(--text-secondary); list-style-type: none; display: flex; flex-direction: column; gap: 8px;">
-              <li><i data-lucide="check"
-                  style="width: 14px; height: 14px; color: var(--success-green); display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
-                Up to 500 Photos</li>
-              <li><i data-lucide="check"
-                  style="width: 14px; height: 14px; color: var(--success-green); display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
-                Custom Theme Colors</li>
-              <li><i data-lucide="check"
-                  style="width: 14px; height: 14px; color: var(--success-green); display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
-                Organizer Dashboard</li>
-              <li><i data-lucide="check"
-                  style="width: 14px; height: 14px; color: var(--success-green); display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
-                ZIP Download All</li>
+            <div class="pricing-tier-name" style="color: #A78BFA;">Starter Album</div>
+            <div class="pricing-amount">₹999</div>
+            <div class="pricing-desc">Per event · one-time</div>
+            <ul class="pricing-features">
+              <li>Up to 500 photos</li>
+              <li>Custom theme colour</li>
+              <li>Organizer dashboard</li>
+              <li>ZIP download all</li>
+              <li>Photo moderation controls</li>
             </ul>
           </div>
-          <button class="btn-primary" style="width: 100%;" onclick="contactSales('Starter Album')">Contact Us</button>
+          <button class="btn-primary-lg" style="width: 100%; justify-content: center;" onclick="contactSales('Starter Album')" id="pricing-starter-cta">Contact Us to Order</button>
         </div>
-        <div class="card flex flex-col justify-between">
+
+        <!-- Pro Celebration -->
+        <div class="pricing-card reveal">
           <div>
-            <h4 class="mb-1">Pro Celebration</h4>
-            <div class="mb-4" style="font-size: 24px; font-weight: 800; font-family: 'Plus Jakarta Sans';">₹2,499</div>
-            <ul class="mb-6"
-              style="font-size: 13px; color: var(--text-secondary); list-style-type: none; display: flex; flex-direction: column; gap: 8px;">
-              <li><i data-lucide="check"
-                  style="width: 14px; height: 14px; color: var(--success-green); display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
-                Unlimited Photos/Videos</li>
-              <li><i data-lucide="check"
-                  style="width: 14px; height: 14px; color: var(--success-green); display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
-                custom QR Code + Logo</li>
-              <li><i data-lucide="check"
-                  style="width: 14px; height: 14px; color: var(--success-green); display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
-                Sponsor Ad Banner</li>
-              <li><i data-lucide="check"
-                  style="width: 14px; height: 14px; color: var(--success-green); display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
-                CSV Guest Export</li>
+            <div class="pricing-tier-name">Pro Celebration</div>
+            <div class="pricing-amount">₹2,499</div>
+            <div class="pricing-desc">Per event · one-time</div>
+            <ul class="pricing-features">
+              <li>Unlimited photos & videos</li>
+              <li>Custom QR code + logo</li>
+              <li>Sponsor ad banner</li>
+              <li>CSV guest export</li>
+              <li>Priority support</li>
             </ul>
           </div>
-          <button class="btn-secondary" style="width: 100%;" onclick="contactSales('Pro Celebration')">Contact
-            Us</button>
+          <button class="btn-secondary-outline" style="width: 100%; justify-content: center;" onclick="contactSales('Pro Celebration')" id="pricing-pro-cta">Contact Us to Order</button>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- ===== HONEST SOCIAL PROOF ===== -->
+  <section id="about" style="padding: 80px 0;">
+    <div class="container">
+      <div class="proof-section reveal">
+        <div class="section-label">Our story</div>
+        <h2 class="section-title" style="margin-bottom: 12px;">Built in Bangalore,<br>for India's Event Scene</h2>
+        <p class="section-desc" style="margin-bottom: 0;">We're not pretending to have 500+ events under our belt. MomentHive is a young, focused product being built by a small team in India, for India. These partner slots below represent the co-brand model we're building toward — not fake logos.</p>
+
+        <!-- Honest empty partner slots -->
+        <div class="partner-slots-row" aria-label="Partner co-brand slots — currently open">
+          <div class="partner-slot">Partner slot</div>
+          <div class="partner-slot">Partner slot</div>
+          <div class="partner-slot">Partner slot</div>
+          <div class="partner-slot">Partner slot</div>
+        </div>
+
+        <!-- Founder note placeholder -->
+        <div class="founder-note">
+          <!-- PLACEHOLDER — Shivam, replace this with your actual founder note before launch -->
+          <p>"[Founder note — add your own words here before launch. Why did you build MomentHive? What problem did you see at Indian weddings that you wanted to solve? Keep it honest and personal.]"</p>
+          <div class="founder-sig">— Shivam, Founder · MomentHive</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FINAL CTA ===== -->
+  <section class="final-cta-section">
+    <div class="final-cta-glow"></div>
+    <div class="container reveal">
+      <div class="section-label">Get started today</div>
+      <h2 class="section-title" style="margin-bottom: 12px;">Your Next Event Deserves<br>a <span class="text-gradient">Shared Album.</span></h2>
+      <p class="section-desc" style="margin-bottom: 36px;">Free to start. No credit card. No app install for guests. Live in 60 seconds.</p>
+      <a href="create.html" class="btn-primary-lg" id="final-cta" style="padding: 16px 36px; font-size: 16px;">
+        <i data-lucide="plus" style="width: 18px; height: 18px;"></i>
+        Create Your Album Free
+      </a>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
   <footer>
-    <div class="container flex flex-col md:flex-row justify-between items-center gap-4">
-      <div>
-        <span class="logo-text" style="font-size: 18px;">MomentHive</span>
-        <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">© 2026 MomentHive. India's first event
-          guest photo album platform.</p>
+    <div class="container">
+      <div class="footer-grid">
+        <!-- Brand column -->
+        <div>
+          <a href="index.html" class="logo-text" style="font-size: 20px; margin-bottom: 12px; display: inline-flex;">MomentHive</a>
+          <p style="font-size: 13px; color: var(--text-muted); margin-top: 8px; line-height: 1.6; max-width: 280px;">
+            India's guest photo album platform — built for weddings, concerts, and everything in between.
+          </p>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 16px;">Made in India 🇮🇳</p>
+        </div>
+
+        <!-- Quick links -->
+        <div>
+          <div class="footer-links-heading">Quick Links</div>
+          <ul class="footer-links-list">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="create.html">Create Album</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact -->
+        <div>
+          <div class="footer-links-heading">Contact</div>
+          <ul class="footer-links-list">
+            <li><a href="mailto:support@momenthive.in">support@momenthive.in</a></li>
+            <li><a href="#about">About</a></li>
+          </ul>
+        </div>
       </div>
-      <div style="font-size: 13px; color: var(--text-secondary);" class="flex items-center gap-4">
-        <span>Made in India 🇮🇳</span>
-        <span>|</span>
-        <a href="mailto:support@momenthive.in"
-          style="color: var(--text-secondary); text-decoration: none;">support@momenthive.in</a>
+
+      <hr class="footer-divider">
+      <div class="footer-bottom">
+        <p class="footer-bottom-text">© 2026 MomentHive. All rights reserved.</p>
+        <p class="footer-bottom-text">India's guest photo album platform.</p>
       </div>
     </div>
   </footer>
@@ -323,12 +1234,7 @@
     // Initialize lucide icons
     lucide.createIcons();
 
-    // Simple handler for contact us
-    function contactSales(plan) {
-      alert("Thank you for your interest in " + plan + "! Please contact us at support@momenthive.in to get started immediately.");
-    }
-
-    // Offline detection banner
+    // Offline detection — only show banner on real browser offline event
     window.addEventListener('online', () => {
       document.getElementById('offline-banner').style.display = 'none';
     });
@@ -336,8 +1242,40 @@
       document.getElementById('offline-banner').style.display = 'block';
     });
     // Don't trust navigator.onLine on initial page load — unreliable, causes false positives.
-    // The online/offline event listeners above still work correctly for real connectivity changes.
     document.getElementById('offline-banner').style.display = 'none';
+
+    // Contact sales handler
+    function contactSales(plan) {
+      alert('Thank you for your interest in the ' + plan + ' plan!\nPlease reach out to us at support@momenthive.in to get set up.');
+    }
+
+    // Section reveal animations via IntersectionObserver
+    const revealEls = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      revealEls.forEach(el => observer.observe(el));
+    } else {
+      // Reduced motion or no IntersectionObserver support — show everything immediately
+      revealEls.forEach(el => el.classList.add('visible'));
+    }
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
   </script>
 </body>
 
