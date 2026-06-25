@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Event Photo Album — MomentHive</title>
+    <!-- Brand Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Brand CSS Stylesheet -->
+    <link rel="stylesheet" href="/css/style.css" />
+    <style>
+      /* Page specific styles */
+      #album-header {
+        background: rgba(20, 20, 20, 0.85);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border-soft);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .event-logo-header {
+        max-height: 48px;
+        max-width: 120px;
+        object-fit: contain;
+        border-radius: 6px;
+      }
+      /* Sponsor watermark banner styles */
+      .album-sponsor-watermark {
+        display: none;
+        background: rgba(124, 58, 237, 0.08);
+        border: 1px solid rgba(124, 58, 237, 0.15);
+        border-radius: 12px;
+        padding: var(--space-4);
+        margin: var(--space-4) auto var(--space-8) auto;
+        text-align: center;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 1200px;
+      }
+      /* Loaders */
+      .loading-stage {
+        text-align: center;
+        padding: var(--space-16) 0;
+      }
+      /* Lock prompt and registration overlay */
+      .lock-container, .registration-container {
+        max-width: 420px;
+        margin: var(--space-16) auto;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Offline Notification banner -->
+    <div id="offline-banner" class="offline-banner">
+      <i data-lucide="wifi-off"></i> Offline. Uploads will complete when connection returns.
+    </div>
+
+    <!-- Album Customized Header -->
+    <header id="album-header">
+      <div class="container flex justify-between items-center">
+        <div class="flex items-center gap-3">
+          <img id="header-event-logo" class="event-logo-header" src="" alt="Event Logo" style="display: none;" />
+          <div>
+            <h3 id="header-event-name" class="font-heading" style="line-height: 1.2;">Loading Event...</h3>
+            <p id="header-event-date" class="code-font" style="font-size: 11px; color: var(--text-secondary);"></p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <span id="header-photo-count-badge" class="badge">0 Photos</span>
+          <a href="index.html" class="btn-secondary" style="padding: 6px 12px; font-size: 13px;">Home</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="container mb-24 mt-6">
+      <!-- Loading Event State -->
+      <div id="loader-view" class="loading-stage">
+        <div class="spinner mb-4" style="width: 40px; height: 40px; border-width: 4px; border-top-color: var(--hive-purple);"></div>
+        <p style="color: var(--text-secondary);">Connecting to MomentHive gallery...</p>
+      </div>
+
+      <!-- Password Lock Prompt View -->
+      <div id="lock-view" class="lock-container card" style="display: none;">
+        <i data-lucide="lock" class="mb-4 text-gradient" style="width: 48px; height: 48px; margin: 0 auto;"></i>
+        <h3 class="mb-2">Private Event Album</h3>
+        <p class="mb-6" style="font-size: 14px; color: var(--text-secondary);">This album is locked by the organizer. Please enter the album password to view and add photos.</p>
+        <div class="form-group mb-4">
+          <input class="form-input" type="password" id="album-lock-password" placeholder="Enter album password" style="text-align: center;" />
+        </div>
+        <button id="unlock-btn" class="btn-primary" style="width: 100%;">Unlock Album</button>
+      </div>
+
+      <!-- Sponsor/Banner Segment -->
+      <div id="sponsor-watermark-banner" class="album-sponsor-watermark">
+        <div class="flex items-center gap-3" style="text-align: left;">
+          <i data-lucide="sparkles" style="color: var(--memory-pink); width: 24px; height: 24px;"></i>
+          <div>
+            <h4 style="font-size: 14px; color: var(--text-primary);">Proud Sponsor of this Album</h4>
+            <p id="sponsor-banner-name" style="font-size: 12px; color: var(--text-secondary);"></p>
+          </div>
+        </div>
+        <img id="sponsor-banner-logo" class="sponsor-logo" src="" alt="Sponsor Logo" />
+      </div>
+
+      <!-- Gallery List View -->
+      <div id="gallery-view" style="display: none;">
+        <!-- Empty Album Slate -->
+        <div id="empty-gallery-slate" class="card text-center" style="padding: 60px 24px; display: none;">
+          <i data-lucide="camera" class="mb-4 text-gradient" style="width: 50px; height: 50px; margin: 0 auto; stroke-width: 1.5;"></i>
+          <h3 class="mb-2">No photos in this album yet</h3>
+          <p class="mb-6" style="color: var(--text-secondary); max-width: 400px; margin-left: auto; margin-right: auto;">Be the first to share your beautiful snapshots with the host! Click the button below to upload.</p>
+          <button class="btn-primary start-upload-btn-trigger">
+            <i data-lucide="image-plus"></i> Upload Photos
+          </button>
+        </div>
+
+        <!-- Masonry Grid Gallery -->
+        <div id="gallery-masonry-grid" class="masonry-gallery">
+          <!-- Populated dynamically via JS -->
+        </div>
+
+        <!-- Pagination/Scroll Sentinel -->
+        <div id="gallery-scroll-sentinel" style="height: 20px; margin-top: 24px;"></div>
+      </div>
+    </main>
+
+    <!-- Floating Upload Control Trigger Bar at Bottom -->
+    <div id="floating-upload-bar" class="upload-trigger-bar" style="display: none;">
+      <span style="font-size: 13px; color: var(--text-secondary);" id="floating-upload-text">Capturing memories live!</span>
+      <button class="btn-primary start-upload-btn-trigger" style="border-radius: 9999px; padding: 10px 20px; font-size: 14px;">
+        <i data-lucide="camera"></i> Add Photos
+      </button>
+    </div>
+
+    <!-- Guest Name & Phone Registration Modal (Popup) -->
+    <div id="guest-registration-modal" class="modal-backdrop">
+      <div class="modal-container">
+        <button class="modal-close" id="close-reg-modal-btn"><i data-lucide="x"></i></button>
+        <i data-lucide="user-check" class="mb-4 text-gradient" style="width: 40px; height: 40px;"></i>
+        <h3 class="mb-2">Before uploading...</h3>
+        <p class="mb-6" style="font-size: 14px; color: var(--text-secondary);">Enter your name and phone number to tag your memories. Host will see who shared each photo!</p>
+        
+        <form id="guest-reg-form">
+          <div class="form-group">
+            <label class="form-label" for="guest-name-input">Your Full Name *</label>
+            <input class="form-input" type="text" id="guest-name-input" placeholder="e.g., Anjali Sharma" required />
+          </div>
+          <div class="form-group mb-6">
+            <label class="form-label" for="guest-phone-input">WhatsApp Number *</label>
+            <input class="form-input" type="tel" id="guest-phone-input" placeholder="e.g., 9876543210 (without +91)" required pattern="[0-9]{10}" title="Please enter a valid 10-digit mobile number" />
+          </div>
+          <button type="submit" class="btn-primary" style="width: 100%;">Save & Continue to Upload</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Multi-File Upload Queue / Progress Modal -->
+    <div id="upload-queue-modal" class="modal-backdrop">
+      <div class="modal-container" style="max-width: 520px;">
+        <h3 class="mb-2">Uploading Memories...</h3>
+        <p class="mb-4" style="font-size: 13px; color: var(--text-secondary);">Please keep this window open while we upload your files securely.</p>
+        
+        <div id="upload-progress-list" style="max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: var(--space-3); margin-bottom: var(--space-4);">
+          <!-- Upload list items added dynamically -->
+        </div>
+
+        <div style="text-align: right;">
+          <button id="close-upload-queue-btn" class="btn-secondary" style="display: none; padding: 8px 16px; font-size: 13px;">Done</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hidden Multi-File Select Input -->
+    <input type="file" id="guest-photos-file-input" multiple accept="image/*,video/*" style="display: none;" />
+
+    <!-- Fullscreen Lightbox Backdrop -->
+    <div id="lightbox" class="lightbox-backdrop">
+      <div class="lightbox-header">
+        <div style="text-align: left;">
+          <h4 id="lightbox-uploader-name" class="uploader-name">Anjali Sharma</h4>
+          <p id="lightbox-upload-time" class="upload-time">Just now</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <button id="lightbox-report-btn" class="gallery-action-btn" style="color: var(--text-muted);"><i data-lucide="flag" style="width: 18px; height: 18px;"></i> Flag</button>
+          <button id="lightbox-close-btn" class="gallery-action-btn" style="color: white;"><i data-lucide="x" style="width: 24px; height: 24px;"></i></button>
+        </div>
+      </div>
+
+      <div class="lightbox-content">
+        <button id="lightbox-prev-btn" class="lightbox-nav-btn lightbox-nav-prev"><i data-lucide="chevron-left"></i></button>
+        
+        <!-- Media Container -->
+        <div id="lightbox-media-container" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;">
+          <img id="lightbox-image-el" class="lightbox-image" src="" alt="Fullscreen image" />
+          <video id="lightbox-video-el" class="lightbox-video" controls autoplay style="display: none;"></video>
+        </div>
+
+        <button id="lightbox-next-btn" class="lightbox-nav-btn lightbox-nav-next"><i data-lucide="chevron-right"></i></button>
+      </div>
+
+      <div class="lightbox-footer">
+        <div class="flex justify-between items-center" style="width: 100%;">
+          <div class="flex items-center gap-4">
+            <button id="lightbox-like-btn" class="gallery-action-btn" style="font-size: 16px;">
+              <i data-lucide="heart" style="width: 20px; height: 20px;"></i> 
+              <span id="lightbox-likes-count">0</span> Likes
+            </button>
+          </div>
+          <button id="lightbox-download-btn" class="btn-primary" style="padding: 8px 16px; font-size: 13px;">
+            <i data-lucide="download" style="width: 16px; height: 16px;"></i> Download High-Res
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Firebase/Album JavaScript module -->
+    <script type="module" src="/js/album.js"></script>
+  </body>
+</html>
